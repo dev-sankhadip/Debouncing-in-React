@@ -1,24 +1,26 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
 
 function App() {
+  const [name, setName] = useState("");
+
+  const debounce = (func, delay) => {
+    let debounceTimer;
+    return function () {
+      const context = this;
+      const args = arguments;
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => func.apply(context, args), delay);
+    };
+  };
+
+  const update = debounce(function (e) {
+    console.log(e.target.value)
+    setName(e.target.value)
+  }, 1000);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <input type="text" onChange={(e)=>{ e.persist(); update(e); }} />
     </div>
   );
 }
